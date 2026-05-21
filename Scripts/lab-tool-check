@@ -23,7 +23,7 @@ echo
 echo "== Comandos =="
 for cmd in \
   python3 pip3 R Rscript jupyter-lab sqlite3 git \
-  curl wget aria2c ffmpeg glow batcat rg fdfind fzf jq tree tmux nvim \
+  curl wget aria2c ffmpeg glow batcat tldr rg fdfind fzf jq tree tmux nvim \
   nmap ffuf gobuster nikto sqlmap tshark tcpdump aircrack-ng john \
   htop btop ncdu smartctl sensors ufw pkg-config podman docker \
   new-data-project laptop-audit mdread dl vt transcribir-video; do

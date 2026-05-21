@@ -147,6 +147,7 @@ install_supported_packages() {
     sqlite3
     sqlmap
     tcpdump
+    tealdeer
     tmux
     tree
     tshark

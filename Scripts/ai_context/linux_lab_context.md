@@ -17,7 +17,7 @@ Fecha de contexto: 2026-05-21
 - Herramientas de red/pentest presentes: nmap, ffuf, gobuster, nikto, sqlmap, tshark, tcpdump, aircrack-ng, bettercap.
 - Herramientas de red/sistema adicionales presentes: openssh-server/sshd, fail2ban, iperf3, mtr, netcat, net-tools, wavemon.
 - Monitoreo presente: htop, btop, ncdu, lm-sensors.
-- Utilidades de terminal presentes: pipx, curl, wget, zip, unzip, jq, fzf, tree, rg/ripgrep, fdfind/fd-find, neovim, tmux.
+- Utilidades de terminal presentes: pipx, curl, wget, zip, unzip, jq, fzf, tree, rg/ripgrep, fdfind/fd-find, neovim, tmux, tldr/tealdeer.
 - Markdown presente: `glow` y `batcat` instalados; `mdread` creado como wrapper para leer `.md` desde terminal.
 - Video/transcripcion presente: `yt-dlp`, `ffmpeg` y `faster-whisper` dentro de `./video-tools/runtime/venv`.
 - Descargas divididas presente: `aria2c` version 1.37.0.
