@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+name="${1:-}"
+if [ -z "$name" ]; then
+  printf 'Uso: new-data-project nombre_del_proyecto\n' >&2
+  exit 2
+fi
+
+case "$name" in
+  /*) root="$name" ;;
+  *) root="$PWD/$name" ;;
+esac
+
+mkdir -p "$root"/{data/raw,data/processed,notebooks,src,models,reports,scripts}
+
+cat > "$root/README.md" <<'EOF'
+# Proyecto de datos
+
+Estructura ligera para esta laptop:
+
+- `data/raw`: datos originales.
+- `data/processed`: datos limpios o convertidos.
+- `notebooks`: exploracion.
+- `src`: codigo reusable.
+- `models`: modelos chicos/medianos.
+- `reports`: salidas, tablas y graficas.
+
+Reglas practicas:
+
+- Conserva los datos originales sin modificar.
+- Evita cargar archivos enormes completos en RAM.
+- Prefiere muestreo, CSV por chunks, SQLite, DuckDB o Parquet.
+- Escribe pasos reproducibles en `src` o `scripts`, no solo en notebooks.
+EOF
+
+cat > "$root/requirements.txt" <<'EOF'
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+openpyxl
+xlsxwriter
+statsmodels
+duckdb
+pyarrow
+polars
+jupyterlab
+EOF
+
+cat > "$root/src/eda.py" <<'EOF'
+from pathlib import Path
+
+import pandas as pd
+
+
+DATA = Path(__file__).resolve().parents[1] / "data"
+
+
+def load_csv(name: str, nrows: int | None = 100_000) -> pd.DataFrame:
+    return pd.read_csv(DATA / "raw" / name, nrows=nrows)
+
+
+if __name__ == "__main__":
+    print("Coloca un CSV en data/raw y usa load_csv('archivo.csv').")
+EOF
+
+cat > "$root/scripts/create-venv.sh" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+EOF
+chmod +x "$root/scripts/create-venv.sh"
+
+cat > "$root/scripts/start-jupyter.sh" <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+if [ -d .venv ]; then
+  . .venv/bin/activate
+fi
+jupyter lab --notebook-dir=.
+EOF
+chmod +x "$root/scripts/start-jupyter.sh"
+
+cat > "$root/analysis.R" <<'EOF'
+cat("Proyecto R listo. Coloca datos en data/raw.\n")
+EOF
+
+printf 'Proyecto creado: %s\n' "$root"
+printf 'Siguiente paso: cd %q && ./scripts/create-venv.sh\n' "$root"

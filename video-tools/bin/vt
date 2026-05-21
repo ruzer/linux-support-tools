@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+ROOT_DIR="$(cd "$(dirname "$SCRIPT_PATH")/.." && pwd)"
+
+usage() {
+  cat <<EOF
+Uso:
+  vt transcribe URL [idioma]
+  vt install
+  vt where
+
+Ejemplos:
+  vt transcribe "https://www.youtube.com/watch?v=..." es
+  vt install
+EOF
+}
+
+command="${1:-}"
+case "$command" in
+  transcribe | transcribir)
+    shift
+    "$ROOT_DIR/bin/transcribir-video.sh" "$@"
+    ;;
+  install | instalar)
+    shift
+    "$ROOT_DIR/bin/instalar-python.sh" "$@"
+    ;;
+  where | donde)
+    echo "$ROOT_DIR"
+    echo "$ROOT_DIR/output"
+    ;;
+  "" | help | -h | --help)
+    usage
+    ;;
+  *)
+    echo "Comando desconocido: $command"
+    usage
+    exit 2
+    ;;
+esac

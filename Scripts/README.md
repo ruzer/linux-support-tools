@@ -1,0 +1,215 @@
+# Scripts de laboratorio Linux
+
+Ubicacion canonica:
+
+```bash
+/home/Ruzer/Dev Projects/Scripts
+```
+
+Los comandos principales tambien estan disponibles desde `~/bin`, asi que pueden ejecutarse desde cualquier terminal.
+
+## Verificar la laptop
+
+```bash
+lab-tool-check
+```
+
+Muestra:
+
+- sistema, disco y RAM disponible;
+- herramientas instaladas;
+- modulos Python disponibles para datos.
+
+## Auditoria rapida del equipo
+
+```bash
+laptop-audit
+```
+
+Sirve para revisar CPU, memoria, disco, temperatura, SMART si hay permisos, procesos principales y herramientas clave.
+
+## Leer Markdown
+
+```bash
+mdread README.md
+```
+
+Abre archivos `.md` en terminal. Usa `glow` si esta instalado; si no, usa `batcat`.
+
+Instalar `glow`:
+
+```bash
+sudo apt install -y glow
+glow --version
+```
+
+## Crear un proyecto de datos
+
+Desde la carpeta donde quieras crear el proyecto:
+
+```bash
+new-data-project mi_proyecto
+cd mi_proyecto
+./scripts/create-venv.sh
+```
+
+Esto crea:
+
+```text
+mi_proyecto/
+  data/
+    raw/
+    processed/
+  notebooks/
+  src/
+  models/
+  reports/
+  scripts/
+  requirements.txt
+  analysis.R
+  README.md
+```
+
+Uso recomendado:
+
+- guarda datos originales en `data/raw`;
+- guarda datos limpios o convertidos en `data/processed`;
+- usa `notebooks` para exploracion;
+- pasa codigo reutilizable a `src`;
+- guarda tablas, graficas y salidas en `reports`.
+
+## Abrir JupyterLab en un proyecto
+
+Dentro del proyecto:
+
+```bash
+./scripts/start-jupyter.sh
+```
+
+Si ya existe `.venv`, el script lo activa antes de abrir JupyterLab.
+
+## Descargar y transcribir videos
+
+Herramienta canonica:
+
+```bash
+/home/Ruzer/Dev Projects/video-tools
+```
+
+Comandos disponibles:
+
+```bash
+vt transcribe "URL_DEL_VIDEO" es
+transcribir-video "URL_DEL_VIDEO" es
+```
+
+Guarda audios, transcripciones `.txt` y subtitulos `.srt` en:
+
+```bash
+/home/Ruzer/Dev Projects/video-tools/output
+```
+
+Dependencias verificadas en esta maquina:
+
+- `yt-dlp`
+- `ffmpeg`
+- `faster-whisper`
+
+## Descargas divididas
+
+Herramienta canonica:
+
+```bash
+/home/Ruzer/Dev Projects/download-tools
+```
+
+Comando principal:
+
+```bash
+dl "URL_DEL_ARCHIVO"
+```
+
+Usar mas conexiones:
+
+```bash
+dl -x 16 "URL_DEL_ARCHIVO"
+```
+
+Descargar lista de URLs:
+
+```bash
+dl list "/home/Ruzer/Dev Projects/download-tools/lists/urls.txt"
+```
+
+Guarda descargas por defecto en:
+
+```bash
+/home/Ruzer/Dev Projects/download-tools/downloads
+```
+
+Dependencia verificada en esta maquina:
+
+- `aria2c`
+
+## Instalar herramientas faltantes
+
+Instalador general recomendado para una laptop Debian nueva:
+
+```bash
+sudo bash "/home/Ruzer/Dev Projects/Scripts/install-linux-lab.sh"
+```
+
+Con contenedores ligeros y runtime de transcripcion:
+
+```bash
+sudo bash "/home/Ruzer/Dev Projects/Scripts/install-linux-lab.sh" --with-containers --with-video-runtime
+```
+
+Con toolchains de desarrollo y Docker clasico:
+
+```bash
+sudo bash "/home/Ruzer/Dev Projects/Scripts/install-linux-lab.sh" --with-dev-toolchains --with-docker
+```
+
+Para completar paquetes Debian de datos/notebooks:
+
+```bash
+sudo bash "/home/Ruzer/Dev Projects/Scripts/install-missing-data-tools.sh"
+```
+
+Para instalar o reinstalar toda la base del laboratorio:
+
+```bash
+sudo bash "/home/Ruzer/Dev Projects/Scripts/install-lab-tools.sh"
+```
+
+Los scripts anteriores se mantienen por compatibilidad, pero el punto unico recomendado es `install-linux-lab.sh`.
+
+## Paquetes por proyecto
+
+No instalar globalmente paquetes Python que cambian mucho. El template ya los incluye en `requirements.txt`:
+
+```text
+duckdb
+pyarrow
+polars
+jupyterlab
+```
+
+Si necesitas agregarlos manualmente:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install duckdb pyarrow polars jupyterlab
+```
+
+## Contexto para IA
+
+El contexto de esta laptop vive en:
+
+```bash
+/home/Ruzer/Dev Projects/Scripts/ai_context/linux_lab_context.md
+```
+
+Incluye el estado de la instalacion, reglas de trabajo y decisiones tomadas para mantener la laptop ligera.

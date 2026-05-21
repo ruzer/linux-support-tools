@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+export PATH="$PATH:/sbin:/usr/sbin"
+
+section() {
+  printf '\n== %s ==\n' "$1"
+}
+
+section "Sistema"
+printf 'Fecha: %s\n' "$(date '+%Y-%m-%d %H:%M:%S')"
+uname -a
+if command -v lsb_release >/dev/null 2>&1; then
+  lsb_release -a 2>/dev/null || true
+fi
+
+section "CPU y memoria"
+lscpu | sed -n '/Model name/p;/CPU(s):/p;/Core(s) per socket/p;/Thread(s) per core/p;/CPU max MHz/p'
+free -h
+
+section "Disco"
+df -h /
+if command -v ncdu >/dev/null 2>&1; then
+  printf '\nTip: usa ncdu ~ para buscar carpetas pesadas.\n'
+fi
+
+section "Temperatura"
+if command -v sensors >/dev/null 2>&1; then
+  sensors || true
+else
+  printf 'lm-sensors no esta instalado.\n'
+fi
+
+section "SMART"
+if command -v smartctl >/dev/null 2>&1; then
+  if sudo -n true 2>/dev/null; then
+    for disk in /dev/sda /dev/nvme0n1; do
+      if [[ -e "$disk" ]]; then
+        sudo smartctl -H "$disk" || true
+      fi
+    done
+  else
+    printf 'Para revisar salud SMART ejecuta: sudo smartctl -H /dev/sda\n'
+  fi
+else
+  printf 'smartmontools no esta instalado.\n'
+fi
+
+section "Procesos principales"
+ps -eo pid,comm,%cpu,%mem --sort=-%cpu | head -n 12
+
+section "Herramientas clave"
+for cmd in python3 R jupyter-lab nmap ffuf gobuster nikto sqlmap tshark tcpdump aircrack-ng john sqlite3 git smartctl ufw; do
+  if command -v "$cmd" >/dev/null 2>&1; then
+    printf '%-14s %s\n' "$cmd" "$(command -v "$cmd")"
+  else
+    printf '%-14s falta\n' "$cmd"
+  fi
+done

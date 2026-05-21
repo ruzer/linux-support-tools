@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+ROOT_DIR="$(cd "$(dirname "$SCRIPT_PATH")/.." && pwd)"
+DEFAULT_DIR="$ROOT_DIR/downloads"
+
+usage() {
+  cat <<EOF
+Uso:
+  dl URL [salida]
+  dl -o CARPETA URL [salida]
+  dl -x CONEXIONES URL [salida]
+  dl list ARCHIVO.txt
+  dl where
+
+Ejemplos:
+  dl "https://example.com/archivo.iso"
+  dl -x 16 "https://example.com/archivo.zip"
+  dl -o "$HOME/Downloads" "https://example.com/video.mp4"
+  dl list "/home/Ruzer/Dev Projects/download-tools/lists/urls.txt"
+EOF
+}
+
+require_aria2() {
+  if ! command -v aria2c >/dev/null 2>&1; then
+    echo "Falta aria2c."
+    echo "Instalalo con:"
+    echo "  sudo apt install -y aria2"
+    exit 1
+  fi
+}
+
+connections=8
+out_dir="$DEFAULT_DIR"
+
+if [[ $# -eq 0 || "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  usage
+  exit 0
+fi
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -x | --connections)
+      connections="${2:-}"
+      shift 2
+      ;;
+    -o | --output-dir)
+      out_dir="${2:-}"
+      shift 2
+      ;;
+    list)
+      require_aria2
+      list_file="${2:-}"
+      if [[ -z "$list_file" || ! -f "$list_file" ]]; then
+        echo "Archivo de lista invalido: ${list_file:-}"
+        exit 2
+      fi
+      mkdir -p "$out_dir"
+      exec aria2c \
+        --dir="$out_dir" \
+        --input-file="$list_file" \
+        --continue=true \
+        --max-connection-per-server="$connections" \
+        --split="$connections" \
+        --min-split-size=1M \
+        --summary-interval=5
+      ;;
+    where)
+      echo "$ROOT_DIR"
+      echo "$DEFAULT_DIR"
+      exit 0
+      ;;
+    --)
+      shift
+      break
+      ;;
+    -*)
+      echo "Opcion desconocida: $1"
+      usage
+      exit 2
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+url="${1:-}"
+name="${2:-}"
+
+if [[ -z "$url" ]]; then
+  usage
+  exit 2
+fi
+
+require_aria2
+mkdir -p "$out_dir"
+
+args=(
+  --dir="$out_dir"
+  --continue=true
+  --max-connection-per-server="$connections"
+  --split="$connections"
+  --min-split-size=1M
+  --summary-interval=5
+)
+
+if [[ -n "$name" ]]; then
+  args+=(--out="$name")
+fi
+
+exec aria2c "${args[@]}" "$url"

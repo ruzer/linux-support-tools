@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PATH="$PATH:/sbin:/usr/sbin"
+
+check_cmd() {
+  local cmd="$1"
+  if command -v "$cmd" >/dev/null 2>&1; then
+    printf '%-22s OK     %s\n' "$cmd" "$(command -v "$cmd")"
+  else
+    printf '%-22s FALTA\n' "$cmd"
+  fi
+}
+
+echo "== Sistema =="
+uname -a
+printf 'Python: %s\n' "$(python3 --version 2>&1)"
+printf 'Disco /: '
+df -h / | awk 'NR==2 {print $4 " libres de " $2 " (" $5 " usado)"}'
+free -h | awk '/^Mem:/ {print "RAM: " $7 " disponible de " $2}'
+
+echo
+echo "== Comandos =="
+for cmd in \
+  python3 pip3 R Rscript jupyter-lab sqlite3 git \
+  curl wget aria2c ffmpeg glow batcat rg fdfind fzf jq tree tmux nvim \
+  nmap ffuf gobuster nikto sqlmap tshark tcpdump aircrack-ng john \
+  htop btop ncdu smartctl sensors ufw pkg-config podman docker \
+  new-data-project laptop-audit mdread dl vt transcribir-video; do
+  check_cmd "$cmd"
+done
+
+echo
+echo "== Modulos Python del sistema =="
+python3 - <<'PY'
+import importlib.util as importlib_util
+
+mods = [
+    "pandas",
+    "numpy",
+    "matplotlib",
+    "seaborn",
+    "sklearn",
+    "scipy",
+    "openpyxl",
+    "xlsxwriter",
+    "statsmodels",
+    "jupyterlab",
+    "pyarrow",
+    "duckdb",
+    "polars",
+]
+for mod in mods:
+    status = "OK" if importlib_util.find_spec(mod) else "FALTA"
+    print(f"{mod:<22} {status}")
+PY
