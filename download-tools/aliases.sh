@@ -1,6 +1,9 @@
+# shellcheck shell=bash
 # Carga este archivo con:
-#   source "/home/Ruzer/Dev Projects/download-tools/aliases.sh"
+#   source "download-tools/aliases.sh"
 
-export PATH="/home/Ruzer/Dev Projects/download-tools/bin:$PATH"
-alias dl='/home/Ruzer/Dev Projects/download-tools/bin/dl'
-
+DOWNLOAD_TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export PATH="$DOWNLOAD_TOOLS_DIR/bin:$PATH"
+dl() {
+  "$DOWNLOAD_TOOLS_DIR/bin/dl" "$@"
+}

@@ -1,5 +1,9 @@
+# shellcheck shell=bash
 # Carga este archivo con:
-#   source "/home/Ruzer/Dev Projects/video-tools/aliases.sh"
+#   source "video-tools/aliases.sh"
 
-export PATH="/home/Ruzer/Dev Projects/video-tools/bin:$PATH"
-alias vt='/home/Ruzer/Dev Projects/video-tools/bin/vt'
+VIDEO_TOOLS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export PATH="$VIDEO_TOOLS_DIR/bin:$PATH"
+vt() {
+  "$VIDEO_TOOLS_DIR/bin/vt" "$@"
+}

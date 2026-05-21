@@ -34,7 +34,7 @@ transcribir-video "URL_DEL_VIDEO" es
 Los resultados se guardan en:
 
 ```bash
-/home/Ruzer/Dev Projects/video-tools/output
+./video-tools/output
 ```
 
 ## Activar comandos
@@ -44,7 +44,7 @@ El archivo `~/.bashrc` ya carga `video-tools/aliases.sh`, asi que en una termina
 En la terminal actual, si todavia no los reconoce:
 
 ```bash
-source "/home/Ruzer/Dev Projects/video-tools/aliases.sh"
+source "./video-tools/aliases.sh"
 ```
 
 ## Reinstalar o reparar
@@ -52,7 +52,7 @@ source "/home/Ruzer/Dev Projects/video-tools/aliases.sh"
 Si alguna vez se borra el entorno Python local:
 
 ```bash
-"/home/Ruzer/Dev Projects/video-tools/bin/vt" install
+./video-tools/bin/vt install
 ```
 
 Si `yt-dlp` o `ffmpeg` faltan en otra maquina:

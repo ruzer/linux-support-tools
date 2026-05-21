@@ -1,9 +1,9 @@
 # Scripts de laboratorio Linux
 
-Ubicacion canonica:
+Ubicacion dentro del repositorio:
 
 ```bash
-/home/Ruzer/Dev Projects/Scripts
+./Scripts
 ```
 
 Los comandos principales tambien estan disponibles desde `~/bin`, asi que pueden ejecutarse desde cualquier terminal.
@@ -90,10 +90,10 @@ Si ya existe `.venv`, el script lo activa antes de abrir JupyterLab.
 
 ## Descargar y transcribir videos
 
-Herramienta canonica:
+Herramienta dentro del repositorio:
 
 ```bash
-/home/Ruzer/Dev Projects/video-tools
+./video-tools
 ```
 
 Comandos disponibles:
@@ -106,7 +106,7 @@ transcribir-video "URL_DEL_VIDEO" es
 Guarda audios, transcripciones `.txt` y subtitulos `.srt` en:
 
 ```bash
-/home/Ruzer/Dev Projects/video-tools/output
+./video-tools/output
 ```
 
 Dependencias verificadas en esta maquina:
@@ -117,10 +117,10 @@ Dependencias verificadas en esta maquina:
 
 ## Descargas divididas
 
-Herramienta canonica:
+Herramienta dentro del repositorio:
 
 ```bash
-/home/Ruzer/Dev Projects/download-tools
+./download-tools
 ```
 
 Comando principal:
@@ -138,13 +138,13 @@ dl -x 16 "URL_DEL_ARCHIVO"
 Descargar lista de URLs:
 
 ```bash
-dl list "/home/Ruzer/Dev Projects/download-tools/lists/urls.txt"
+dl list "./download-tools/lists/urls.txt"
 ```
 
 Guarda descargas por defecto en:
 
 ```bash
-/home/Ruzer/Dev Projects/download-tools/downloads
+./download-tools/downloads
 ```
 
 Dependencia verificada en esta maquina:
@@ -156,31 +156,31 @@ Dependencia verificada en esta maquina:
 Instalador general recomendado para una laptop Debian nueva:
 
 ```bash
-sudo bash "/home/Ruzer/Dev Projects/Scripts/install-linux-lab.sh"
+sudo bash "./Scripts/install-linux-lab.sh"
 ```
 
 Con contenedores ligeros y runtime de transcripcion:
 
 ```bash
-sudo bash "/home/Ruzer/Dev Projects/Scripts/install-linux-lab.sh" --with-containers --with-video-runtime
+sudo bash "./Scripts/install-linux-lab.sh" --with-containers --with-video-runtime
 ```
 
 Con toolchains de desarrollo y Docker clasico:
 
 ```bash
-sudo bash "/home/Ruzer/Dev Projects/Scripts/install-linux-lab.sh" --with-dev-toolchains --with-docker
+sudo bash "./Scripts/install-linux-lab.sh" --with-dev-toolchains --with-docker
 ```
 
 Para completar paquetes Debian de datos/notebooks:
 
 ```bash
-sudo bash "/home/Ruzer/Dev Projects/Scripts/install-missing-data-tools.sh"
+sudo bash "./Scripts/install-missing-data-tools.sh"
 ```
 
 Para instalar o reinstalar toda la base del laboratorio:
 
 ```bash
-sudo bash "/home/Ruzer/Dev Projects/Scripts/install-lab-tools.sh"
+sudo bash "./Scripts/install-lab-tools.sh"
 ```
 
 Los scripts anteriores se mantienen por compatibilidad, pero el punto unico recomendado es `install-linux-lab.sh`.
@@ -209,7 +209,7 @@ python -m pip install duckdb pyarrow polars jupyterlab
 El contexto de esta laptop vive en:
 
 ```bash
-/home/Ruzer/Dev Projects/Scripts/ai_context/linux_lab_context.md
+./Scripts/ai_context/linux_lab_context.md
 ```
 
 Incluye el estado de la instalacion, reglas de trabajo y decisiones tomadas para mantener la laptop ligera.

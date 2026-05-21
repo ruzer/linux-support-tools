@@ -41,7 +41,7 @@ dl "URL_DEL_ARCHIVO" "archivo-final.zip"
 Descargar una lista de URLs:
 
 ```bash
-dl list "/home/Ruzer/Dev Projects/download-tools/lists/urls.txt"
+dl list "./download-tools/lists/urls.txt"
 ```
 
 ## Activar comando
@@ -51,7 +51,7 @@ El archivo `~/.bashrc` ya carga `download-tools/aliases.sh`, asi que en una term
 En la terminal actual, si todavia no lo reconoce:
 
 ```bash
-source "/home/Ruzer/Dev Projects/download-tools/aliases.sh"
+source "./download-tools/aliases.sh"
 ```
 
 ## Reinstalar o reparar

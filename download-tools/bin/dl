@@ -18,7 +18,7 @@ Ejemplos:
   dl "https://example.com/archivo.iso"
   dl -x 16 "https://example.com/archivo.zip"
   dl -o "$HOME/Downloads" "https://example.com/video.mp4"
-  dl list "/home/Ruzer/Dev Projects/download-tools/lists/urls.txt"
+  dl list "./download-tools/lists/urls.txt"
 EOF
 }
 

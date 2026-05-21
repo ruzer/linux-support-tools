@@ -19,17 +19,17 @@ Fecha de contexto: 2026-05-21
 - Monitoreo presente: htop, btop, ncdu, lm-sensors.
 - Utilidades de terminal presentes: pipx, curl, wget, zip, unzip, jq, fzf, tree, rg/ripgrep, fdfind/fd-find, neovim, tmux.
 - Markdown presente: `glow` y `batcat` instalados; `mdread` creado como wrapper para leer `.md` desde terminal.
-- Video/transcripcion presente: `yt-dlp`, `ffmpeg` y `faster-whisper` dentro de `/home/Ruzer/Dev Projects/video-tools/runtime/venv`.
+- Video/transcripcion presente: `yt-dlp`, `ffmpeg` y `faster-whisper` dentro de `./video-tools/runtime/venv`.
 - Descargas divididas presente: `aria2c` version 1.37.0.
 - `john`, `smartctl` y `ufw` estan instalados por apt, pero en Debian viven bajo `/usr/sbin`; los scripts deben extender PATH con `/sbin:/usr/sbin`.
 - `sshd` tambien vive bajo `/usr/sbin` o `/sbin` segun PATH; verificar con `PATH="$PATH:/sbin:/usr/sbin" command -v sshd`.
 
 ## Estandar de scripts
 
-Directorio canonico para scripts nuevos:
+Directorio canonico para scripts nuevos dentro del repositorio:
 
 ```text
-/home/Ruzer/Dev Projects/Scripts
+./Scripts
 ```
 
 Scripts principales:
@@ -43,14 +43,14 @@ Scripts principales:
 
 Herramientas externas organizadas:
 
-- `/home/Ruzer/Dev Projects/video-tools`: CLI para descargar audio/video y transcribir.
+- `./video-tools`: CLI para descargar audio/video y transcribir.
   - Comandos: `vt transcribe "URL" es` y `transcribir-video "URL" es`.
-  - Salida: `/home/Ruzer/Dev Projects/video-tools/output`.
+  - Salida: `./video-tools/output`.
   - Usa `yt-dlp`, `ffmpeg`, `faster-whisper` y `numpy<2.3` por compatibilidad con esta CPU.
-- `/home/Ruzer/Dev Projects/download-tools`: CLI para descargas divididas con `aria2c`.
+- `./download-tools`: CLI para descargas divididas con `aria2c`.
   - Comando: `dl "URL"` o `dl -x 16 "URL"`.
-  - Listas: `dl list "/home/Ruzer/Dev Projects/download-tools/lists/urls.txt"`.
-  - Salida: `/home/Ruzer/Dev Projects/download-tools/downloads`.
+  - Listas: `dl list "./download-tools/lists/urls.txt"`.
+  - Salida: `./download-tools/downloads`.
   - Usa `aria2c`.
 
 Aliases persistentes en `~/.bashrc`:
@@ -87,5 +87,5 @@ Fuente revisada: https://github.com/multica-ai/andrej-karpathy-skills/blob/main/
 - Contenedores no instalados: `podman` y `docker.io`. Preferir `podman` si se necesita una opcion soportada por Debian y mas ligera.
 - `yt-dlp`, `ffmpeg`, `faster-whisper` y `aria2c` estan listos para uso desde sus CLIs locales.
 - Usar `lab-tool-check` despues de instalar.
-- En una laptop nueva, usar primero `sudo bash "/home/Ruzer/Dev Projects/Scripts/install-linux-lab.sh"`. Agregar `--with-containers` si se necesita Podman, `--with-docker` si se requiere Docker clasico, y `--with-video-runtime` si se usara transcripcion local.
+- En una laptop nueva, usar primero `sudo bash "./Scripts/install-linux-lab.sh"` desde la raiz del repositorio. Agregar `--with-containers` si se necesita Podman, `--with-docker` si se requiere Docker clasico, y `--with-video-runtime` si se usara transcripcion local.
 - Crear proyectos con `new-data-project <nombre>` y trabajar en `.venv`.
