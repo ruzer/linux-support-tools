@@ -4,10 +4,10 @@ set -euo pipefail
 export PATH="$PATH:/sbin:/usr/sbin"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-WORKSPACE_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 TARGET_USER="${SUDO_USER:-$USER}"
 TARGET_HOME="$(getent passwd "$TARGET_USER" | cut -d: -f6)"
 USER_BIN="$TARGET_HOME/bin"
+TOOLS_DIR="$TARGET_HOME/Linux-Tools"
 
 WITH_CONTAINERS=0
 WITH_DOCKER=0
@@ -224,9 +224,9 @@ install_local_clis() {
   link_if_exists "$SCRIPT_DIR/mdread" "mdread"
   link_if_exists "$SCRIPT_DIR/new-data-project" "new-data-project"
 
-  link_if_exists "$WORKSPACE_DIR/video-tools/bin/vt" "vt"
-  link_if_exists "$WORKSPACE_DIR/video-tools/bin/transcribir-video" "transcribir-video"
-  link_if_exists "$WORKSPACE_DIR/download-tools/bin/dl" "dl"
+  link_if_exists "$TOOLS_DIR/video-tools/bin/vt" "vt"
+  link_if_exists "$TOOLS_DIR/video-tools/bin/transcribir-video" "transcribir-video"
+  link_if_exists "$TOOLS_DIR/download-tools/bin/dl" "dl"
 
   local user_path_line="export PATH=\"\$HOME/bin:\$PATH\""
   if ! grep -F "$user_path_line" "$TARGET_HOME/.bashrc" >/dev/null 2>&1; then
@@ -248,7 +248,7 @@ configure_user_defaults() {
 }
 
 install_video_runtime() {
-  local vt_bin="$WORKSPACE_DIR/video-tools/bin/vt"
+  local vt_bin="$TOOLS_DIR/video-tools/bin/vt"
 
   if [[ ! -x "$vt_bin" ]]; then
     echo "Aviso: no existe $vt_bin; se omite runtime de video."
@@ -261,7 +261,7 @@ install_video_runtime() {
   fi
 
   echo "uv no esta instalado; preparando runtime de video con venv + pip."
-  local root="$WORKSPACE_DIR/video-tools"
+  local root="$TOOLS_DIR/video-tools"
   local venv="$root/runtime/venv"
   install -d -m 0755 -o "$TARGET_USER" -g "$TARGET_USER" "$root/runtime"
   sudo -u "$TARGET_USER" python3 -m venv "$venv"

@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+term() {
+  x-terminal-emulator -T "$1" -e bash -lc "$2; echo; read -rp 'Presiona Enter para cerrar...'"
+}
+
+ask_host() {
+  yad --entry --title="Servidor remoto" --text="usuario@host o IP:" --entry-text="${1:-}"
+}
+
+case "${1:-menu}" in
+  menu)
+    choice=$(yad --list --title="Monitoreo Remoto" --width=720 --height=430 \
+      --column="Accion" --column="Uso" \
+      "SSH" "Entrar a un servidor" \
+      "Mosh" "SSH resistente a cortes de red" \
+      "Glances remoto" "Monitor CPU/RAM/disco por SSH" \
+      "Btop remoto" "Abrir btop en servidor por SSH" \
+      "Disco remoto" "df, lsblk y uso de disco" \
+      "Servicios remotos" "systemctl status basico" \
+      "Puertos remotos" "Escaneo nmap del servidor" \
+      "Montar SSHFS" "Montar carpeta remota en ~/RemoteMount" \
+      "Checks estilo Nagios" "Plantillas check_ping/check_ssh/check_http" \
+      "Node Exporter" "Comandos para instalar/usar node exporter") || exit 0
+    action=${choice%%|*}
+    exec "$0" "$action"
+    ;;
+  "SSH")
+    host=$(ask_host) || exit 0
+    x-terminal-emulator -T "SSH $host" -e ssh "$host" &
+    ;;
+  "Mosh")
+    host=$(ask_host) || exit 0
+    x-terminal-emulator -T "Mosh $host" -e mosh "$host" &
+    ;;
+  "Glances remoto")
+    host=$(ask_host) || exit 0
+    term "Glances $host" "ssh '$host' 'command -v glances >/dev/null && glances || (echo glances no esta instalado; echo instala: sudo apt install glances)'"
+    ;;
+  "Btop remoto")
+    host=$(ask_host) || exit 0
+    term "btop $host" "ssh '$host' 'command -v btop >/dev/null && btop || (command -v htop >/dev/null && htop) || top'"
+    ;;
+  "Disco remoto")
+    host=$(ask_host) || exit 0
+    term "Disco $host" "ssh '$host' 'hostname; echo; df -h; echo; lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINTS,MODEL 2>/dev/null || true; echo; command -v ncdu >/dev/null && echo \"ncdu disponible\" || true'"
+    ;;
+  "Servicios remotos")
+    host=$(ask_host) || exit 0
+    term "Servicios $host" "ssh '$host' 'hostname; uptime; echo; systemctl --failed 2>/dev/null || true; echo; systemctl status ssh 2>/dev/null | head -40 || true'"
+    ;;
+  "Puertos remotos")
+    host=$(ask_host) || exit 0
+    term "Nmap $host" "nmap -sV '$host'"
+    ;;
+  "Montar SSHFS")
+    host=$(ask_host) || exit 0
+    mkdir -p "$HOME/RemoteMount"
+    term "SSHFS $host" "sshfs '$host': '$HOME/RemoteMount'; echo Montado en $HOME/RemoteMount; mount | grep RemoteMount"
+    ;;
+  "Checks estilo Nagios")
+    term "Checks monitoreo" "cat <<'EOF'
+Ejemplos:
+
+check_ping -H IP_O_HOST -w 100.0,20% -c 500.0,60%
+check_ssh -H IP_O_HOST
+check_http -H dominio.com -S
+check_disk -w 20% -c 10% -p /
+check_load -w 4,3,2 -c 8,6,4
+
+Estos checks son utiles para scripts propios o integrarlos luego a Icinga/Nagios.
+EOF"
+    ;;
+  "Node Exporter")
+    term "Node Exporter" "cat <<'EOF'
+Para monitoreo tipo Prometheus/Grafana:
+
+En cada servidor Linux:
+  sudo apt install prometheus-node-exporter
+  sudo systemctl enable --now prometheus-node-exporter
+
+Puerto por defecto:
+  9100/tcp
+
+Probar desde esta laptop:
+  curl http://IP_DEL_SERVER:9100/metrics | head
+
+Para dashboards completos hace falta Prometheus + Grafana.
+En esta laptop vieja conviene correrlos en otro equipo o con cuidado.
+EOF"
+    ;;
+  *) "$0" menu ;;
+esac

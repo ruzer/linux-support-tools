@@ -90,10 +90,10 @@ Si ya existe `.venv`, el script lo activa antes de abrir JupyterLab.
 
 ## Descargar y transcribir videos
 
-Herramienta dentro del repositorio:
+Herramienta fuera de `Dev Projects`, porque no es un proyecto de desarrollo:
 
 ```bash
-./video-tools
+~/Linux-Tools/video-tools
 ```
 
 Comandos disponibles:
@@ -106,7 +106,7 @@ transcribir-video "URL_DEL_VIDEO" es
 Guarda audios, transcripciones `.txt` y subtitulos `.srt` en:
 
 ```bash
-./video-tools/output
+~/Linux-Tools/video-tools/output
 ```
 
 Dependencias verificadas en esta maquina:
@@ -117,10 +117,10 @@ Dependencias verificadas en esta maquina:
 
 ## Descargas divididas
 
-Herramienta dentro del repositorio:
+Herramienta fuera de `Dev Projects`, porque es utileria de sistema:
 
 ```bash
-./download-tools
+~/Linux-Tools/download-tools
 ```
 
 Comando principal:
@@ -138,13 +138,13 @@ dl -x 16 "URL_DEL_ARCHIVO"
 Descargar lista de URLs:
 
 ```bash
-dl list "./download-tools/lists/urls.txt"
+dl list "$HOME/Linux-Tools/download-tools/lists/urls.txt"
 ```
 
 Guarda descargas por defecto en:
 
 ```bash
-./download-tools/downloads
+~/Linux-Tools/download-tools/downloads
 ```
 
 Dependencia verificada en esta maquina:
@@ -158,6 +158,14 @@ Instalador general recomendado para una laptop Debian nueva:
 ```bash
 sudo bash "./Scripts/install-linux-lab.sh"
 ```
+
+## Instalar herramientas de desarrollo y bases de datos
+
+```bash
+sudo bash "./Scripts/install-dev-db-tools.sh"
+```
+
+Instala editores ligeros, clientes de bases de datos y Adminer.
 
 Con contenedores ligeros y runtime de transcripcion:
 
@@ -184,6 +192,44 @@ sudo bash "./Scripts/install-lab-tools.sh"
 ```
 
 Los scripts anteriores se mantienen por compatibilidad, pero el punto unico recomendado es `install-linux-lab.sh`.
+
+## Herramientas de soporte, rescate y forense
+
+Menu local para tareas comunes:
+
+```bash
+./Scripts/rescue-toolbox
+```
+
+Incluye accesos a inventario del equipo, discos, SMART, GParted, TestDisk,
+PhotoRec, ddrescue, imagenes de USB, hashes, YARA, binwalk, Wireshark,
+firewall, auditoria y herramientas de red.
+
+Instalador del paquete extra:
+
+```bash
+sudo bash "./Scripts/install-swiss-tools.sh"
+```
+
+Instala herramientas para recuperacion, forense basico/intermedio, backups,
+antivirus, auditoria de seguridad y manejo de imagenes.
+
+## Monitoreo remoto
+
+Menu local para revisar servidores por SSH:
+
+```bash
+./Scripts/remote-monitor
+```
+
+Incluye accesos para SSH, Mosh, Glances remoto, btop/htop remoto, discos,
+servicios, Nmap, SSHFS, checks estilo Nagios y notas de Node Exporter.
+
+Instalador del paquete de monitoreo:
+
+```bash
+sudo bash "./Scripts/install-monitoring-tools.sh"
+```
 
 ## Paquetes por proyecto
 

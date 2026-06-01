@@ -1,0 +1,210 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+term() {
+  x-terminal-emulator -T "$1" -e bash -lc "$2; echo; read -rp 'Presiona Enter para cerrar...'"
+}
+
+run_gui() {
+  if command -v "$1" >/dev/null 2>&1; then
+    "$@" >/dev/null 2>&1 &
+  else
+    yad --warning --title="No instalado" --text="No encontre: $1"
+  fi
+}
+
+choose_disk() {
+  lsblk -ndo NAME,SIZE,TYPE,MODEL | awk '$3=="disk"{print "/dev/"$1"  "$2"  "$4" "$5" "$6" "$7}'
+}
+
+show_info() {
+  term "Inventario del equipo" "clear; inxi -Fxxxz; echo; lsblk -o NAME,SIZE,TYPE,FSTYPE,LABEL,MOUNTPOINTS,MODEL"
+}
+
+disk_health() {
+  disk=$(choose_disk | yad --list --title="Selecciona disco" --column="Discos" --height=260 --width=620) || exit 0
+  disk=${disk%% *}
+  term "SMART $disk" "sudo smartctl -a '$disk'"
+}
+
+ddrescue_help() {
+  term "Plantilla ddrescue" "cat <<'EOF'
+Rescate seguro de disco/USB danado con ddrescue:
+
+1. Identifica discos:
+   lsblk -o NAME,SIZE,TYPE,FSTYPE,LABEL,MOUNTPOINTS,MODEL
+
+2. NO montes el disco danado.
+
+3. Primer pase rapido:
+   sudo ddrescue -f -n /dev/sdX ~/rescate.img ~/rescate.log
+
+4. Segundo pase, intenta sectores dificiles:
+   sudo ddrescue -f -d -r3 /dev/sdX ~/rescate.img ~/rescate.log
+
+5. Trabaja sobre la imagen, no sobre el original:
+   testdisk ~/rescate.img
+   photorec ~/rescate.img
+
+Cambia /dev/sdX por el disco correcto. Verifica dos veces antes de ejecutar.
+EOF"
+}
+
+usb_image_help() {
+  term "Imagen de USB" "cat <<'EOF'
+Crear imagen forense/simple de una USB:
+
+1. Identifica el USB:
+   lsblk -o NAME,SIZE,TYPE,FSTYPE,LABEL,MOUNTPOINTS,MODEL
+
+2. Desmonta sus particiones:
+   sudo umount /dev/sdX1
+
+3. Crear imagen:
+   sudo dd if=/dev/sdX of=~/usb-evidencia.img bs=4M status=progress conv=noerror,sync
+
+4. Calcular hash:
+   sha256sum ~/usb-evidencia.img | tee ~/usb-evidencia.img.sha256
+
+Para trabajar sin modificar el original:
+   testdisk ~/usb-evidencia.img
+   photorec ~/usb-evidencia.img
+EOF"
+}
+
+firewall_baseline() {
+  term "Firewall basico" "cat <<'EOF'
+Perfil recomendado para esta laptop:
+
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow OpenSSH
+sudo ufw enable
+sudo ufw status verbose
+
+Si NO vas a entrar por SSH desde otra maquina, omite:
+sudo ufw allow OpenSSH
+EOF"
+}
+
+network_tools() {
+  term "Red y diagnostico" "cat <<'EOF'
+Comandos utiles:
+
+IP y rutas:
+  ip addr
+  ip route
+
+DNS:
+  dig example.com
+  host example.com
+
+Escaneo de tu red local:
+  ip route
+  sudo nmap -sn TU_RED/24
+
+Puertos de una maquina propia:
+  nmap -sV IP
+
+Captura rapida:
+  sudo tcpdump -i any -nn
+
+Prueba de velocidad LAN:
+  iperf3 -s
+  iperf3 -c IP_DEL_SERVIDOR
+EOF"
+}
+
+case "${1:-menu}" in
+  menu)
+    choice=$(yad --list --title="Navaja Suiza - Soporte y Rescate" \
+      --width=760 --height=520 --column="Accion" --column="Uso" \
+      "Inventario del equipo" "CPU, RAM, discos, USB, sistema" \
+      "Discos y particiones" "Abrir GParted" \
+      "Salud SMART" "Revisar disco seleccionado" \
+      "Recuperar particiones" "Abrir TestDisk" \
+      "Recuperar archivos" "Abrir PhotoRec" \
+      "Imagen forense GUI" "Abrir Guymager si esta instalado" \
+      "Rescate ddrescue" "Plantilla segura para discos danados" \
+      "Imagen de USB" "Crear imagen y hash, instrucciones" \
+      "Forense archivos" "Hashes, YARA, binwalk, timeline" \
+      "Autopsy" "Analisis forense web/local" \
+      "Uso de disco" "Abrir analizador de espacio" \
+      "Backups graficos" "Abrir Grsync" \
+      "Firewall" "GUI y perfil recomendado" \
+      "Red" "Nmap, tcpdump, iperf, DNS" \
+      "Wireshark" "Analisis de trafico" \
+      "Monitoreo remoto" "SSH, Glances, Nmap y checks" \
+      "Auditoria laptop" "Ejecutar laptop-audit" \
+      "Ver herramientas" "Ejecutar lab-tool-check" \
+      "Distros referencia" "Kali, SIFT, Parrot, CAINE") || exit 0
+    action=${choice%%|*}
+    exec "$0" "$action"
+    ;;
+  "Inventario del equipo") show_info ;;
+  "Discos y particiones") run_gui gparted ;;
+  "Salud SMART") disk_health ;;
+  "Recuperar particiones") term "TestDisk" "sudo testdisk" ;;
+  "Recuperar archivos") term "PhotoRec" "sudo photorec" ;;
+  "Imagen forense GUI") run_gui guymager ;;
+  "Rescate ddrescue") ddrescue_help ;;
+  "Imagen de USB") usb_image_help ;;
+  "Forense archivos") term "Forense archivos" "cat <<'EOF'
+Comandos utiles sobre una carpeta o imagen montada:
+
+Hashes recursivos:
+  hashdeep -r RUTA > hashes.txt
+
+Firma difusa:
+  ssdeep -r RUTA > ssdeep.txt
+
+Buscar reglas YARA:
+  yara -r regla.yar RUTA
+
+Extraer/analizar firmware o archivos:
+  binwalk ARCHIVO
+  binwalk -e ARCHIVO
+
+Carving de archivos:
+  foremost -i imagen.dd -o salida_foremost
+  scalpel imagen.dd -o salida_scalpel
+
+Timeline:
+  log2timeline.py timeline.plaso imagen.dd
+  psort.py -o l2tcsv timeline.plaso > timeline.csv
+EOF" ;;
+  "Autopsy") term "Autopsy" "autopsy" ;;
+  "Uso de disco") run_gui baobab ;;
+  "Backups graficos") run_gui grsync ;;
+  "Firewall") run_gui gufw; firewall_baseline ;;
+  "Red") network_tools ;;
+  "Wireshark") run_gui wireshark ;;
+  "Monitoreo remoto") exec "$HOME/bin/remote-monitor" ;;
+  "Auditoria laptop") term "Auditoria laptop" "laptop-audit" ;;
+  "Ver herramientas") term "Herramientas instaladas" "lab-tool-check" ;;
+  "Distros referencia") term "Distros referencia" "cat <<'EOF'
+Referencias para no inventar desde cero:
+
+Kali Linux:
+  - Usa listas oficiales de herramientas y metapaquetes.
+  - Bueno para pentesting/red/Wi-Fi.
+  - En esta laptop conviene usarlo Live USB, no instalarlo completo.
+
+SANS SIFT Workstation:
+  - Referencia fuerte para DFIR/forense.
+  - Mejor en VM/equipo mas potente; de ahi copiamos categorias.
+
+Parrot Security:
+  - Distro de seguridad con menu organizado.
+  - Buena referencia de categorias: info gathering, forensics, wireless.
+
+CAINE:
+  - Enfocada a forense digital con GUI.
+  - Buena para aprender flujo de adquisicion/analisis.
+
+Debian/MX:
+  - Tiene forensics-all y forensics-extra, pero son grandes.
+  - Mejor instalar set curado con install-swiss-tools.sh.
+EOF" ;;
+  *) "$0" menu ;;
+esac
