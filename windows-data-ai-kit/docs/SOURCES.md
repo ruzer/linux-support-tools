@@ -1,0 +1,35 @@
+# Sources checked
+
+- Microsoft winget official docs: https://learn.microsoft.com/windows/package-manager/winget/
+- Microsoft winget install command: https://learn.microsoft.com/windows/package-manager/winget/install
+- Python on Windows official docs: https://docs.python.org/3.12/using/windows.html
+- PyCharm official install docs: https://www.jetbrains.com/help/pycharm/installation-guide.html
+- Anthropic Claude Code install docs: https://docs.anthropic.com/en/docs/claude-code/getting-started
+- Claude Code Windows install docs: https://code.claude.com/docs/en/installation
+- OpenAI Codex CLI help: https://help.openai.com/en/articles/11096431
+- Ollama official site: https://ollama.com/
+- yt-dlp GitHub: https://github.com/yt-dlp/yt-dlp
+- FFmpeg official site: https://ffmpeg.org/
+- aria2 official site: https://aria2.github.io/
+- Pandoc official site: https://pandoc.org/
+- faster-whisper GitHub: https://github.com/SYSTRAN/faster-whisper
+- MarkItDown GitHub: https://github.com/microsoft/markitdown
+- R official Windows downloads: https://cloud.r-project.org/bin/windows/base/
+- Posit RStudio Desktop: https://posit.co/download/rstudio-desktop/
+- Quarto docs: https://quarto.org/docs/
+- Docker Desktop Windows install docs: https://docs.docker.com/desktop/setup/install/windows-install/
+- Hyperspace node GitHub: https://github.com/hyperspaceai/hyperspace-node
+- Hyperspace P2P dashboard: https://p2p.hyper.space
+- Orange Data Mining: https://orangedatamining.com/
+- KNIME Analytics Platform: https://www.knime.com/knime-analytics-platform
+- Weka: https://ml.cms.waikato.ac.nz/weka/
+- QGIS: https://qgis.org/
+- SAGA GIS: https://saga-gis.sourceforge.io/
+- Calibre: https://calibre-ebook.com/
+- Joplin: https://joplinapp.org/
+- AnythingLLM: https://anythingllm.com/
+- Open WebUI: https://openwebui.com/
+- Jan: https://www.jan.ai/
+- LM Studio: https://lmstudio.ai/
+- Homebrew: https://brew.sh/
+- Miniforge Homebrew cask: https://formulae.brew.sh/cask/miniforge

@@ -1,6 +1,12 @@
 # Linux Support Tools
 
+Version: `0.1.0`
+
 Herramientas utiles para preparar y mantener laptops Linux basadas en Debian.
+
+> Nota de alcance: el repositorio ya incluye un kit Windows/macOS en
+> `windows-data-ai-kit/`. Si este repo se convierte formalmente en multi-OS,
+> el nombre recomendado es `lab-bootstrap-tools`.
 
 ## Instalador general
 
@@ -9,6 +15,33 @@ Para instalar la base de trabajo en una laptop nueva:
 ```bash
 sudo bash Scripts/install-linux-lab.sh
 ```
+
+## Kit Windows/macOS
+
+Para preparar una laptop Windows 10/11 para datos, IA, R/RStudio, video,
+Markdown y herramientas academicas:
+
+```text
+windows-data-ai-kit/START-HERE.cmd
+```
+
+Lanzadores rapidos:
+
+```text
+windows-data-ai-kit/START-RECOMMENDED.cmd
+windows-data-ai-kit/START-BASE-ONLY.cmd
+windows-data-ai-kit/START-ALL-EXTRAS.cmd
+```
+
+Para macOS:
+
+```zsh
+cd windows-data-ai-kit/macOS
+chmod +x START-HERE-mac.command
+./START-HERE-mac.command
+```
+
+La opcion recomendada para otra laptop nueva es `START-RECOMMENDED.cmd`.
 
 Opciones frecuentes:
 
