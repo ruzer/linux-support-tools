@@ -12,7 +12,7 @@ Lanzadores:
 
 - `START-HERE.cmd`: abre menu interactivo.
 - `START-RECOMMENDED.cmd`: recomendado para otra laptop; instala base + academico/datos + apps IA locales + soporte.
-- `START-MAESTRIA.cmd`: perfil para IA, programacion, mineria de datos, estadistica, documentos y soporte.
+- `START-MAESTRIA.cmd`: perfil para IA, programacion, mineria de datos, estadistica, documentos, soporte y Maestria Docker Lab.
 - `START-BASE-ONLY.cmd`: solo base, lo mas rapido y conservador.
 - `START-ALL-EXTRAS.cmd`: instala todo, incluyendo Docker/geodatos/automatizacion; puede tardar bastante.
 
@@ -53,6 +53,7 @@ Instala y configura:
 - Reporte de hardware para revisar pantalla/GPU/drivers
 - Media tools locales: `vt`, `transcribir-video`, `dl`, `to-markdown`
 - Support tools locales: `pc-audit`
+- Maestria Docker Lab local: `maestria-lab`
 
 Extras opcionales por menu:
 
@@ -61,6 +62,7 @@ Extras opcionales por menu:
 - Soporte tecnico: Sysinternals, PowerShell 7, Everything, WizTree, CrystalDiskInfo, HWiNFO, CPU-Z, GPU-Z, RustDesk, Tailscale, WireGuard, PuTTY, WinSCP, FileZilla, VLC, OBS, HandBrake, Audacity, GIMP, BleachBit, Rufus, Ventoy, Etcher, Syncthing, LocalSend, KDE Connect.
 - Geodatos: QGIS LTR, SAGA GIS.
 - Automatizacion: Docker Desktop, n8n, Node-RED.
+- Maestria Docker Lab: clona `ruzer/maestria-anahuac-datos-docker` y prepara MySQL, Adminer, Metabase, Superset, Jupyter, Streamlit y backups.
 
 La laptop necesita internet para descargar versiones actuales.
 
@@ -76,6 +78,8 @@ transcribir-video "URL_DEL_VIDEO" es small
 dl "https://example.com/archivo.zip"
 to-markdown ".\documento.pdf" ".\documento.md"
 pc-audit
+maestria-lab setup
+maestria-lab start
 ```
 
 Opcionales:

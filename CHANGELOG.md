@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 - 2026-06-08
+
+- Wire `START-MAESTRIA.cmd` to the real GitHub repo `ruzer/maestria-anahuac-datos-docker`.
+- Add `InstallMastersDockerLab` profile and `maestria-lab` helper.
+- Document MySQL, Adminer, Metabase, Superset, Jupyter, Streamlit, and backup services from the master's Docker repo.
+
 ## 0.2.0 - 2026-06-08
 
 - Add `START-MAESTRIA.cmd` for AI, programming, data mining, statistics, documents, and support tools.

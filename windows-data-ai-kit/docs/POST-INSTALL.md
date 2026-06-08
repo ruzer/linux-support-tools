@@ -29,6 +29,7 @@ yt-dlp --version
 aria2c --version
 vt where
 pc-audit
+maestria-lab where
 ```
 
 For local Llama:
@@ -45,6 +46,16 @@ transcribir-video "URL_DEL_VIDEO" es small
 to-markdown ".\documento.pdf" ".\documento.md"
 ```
 
+For the Anahuac master's Docker lab:
+
+```powershell
+maestria-lab setup
+maestria-lab start
+maestria-lab urls
+```
+
+If Docker Desktop was installed during this run, restart Windows before `maestria-lab start`.
+
 Notes:
 
 - Microsoft Defender is enough for most clean Windows 10 installs. The script enables PUA protection and updates signatures.
@@ -60,6 +71,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\Install-WindowsDataLab.ps1 -I
 - Docker Desktop is optional. It requires Windows 10 22H2, WSL 2, 8 GB+ RAM, and virtualization enabled in BIOS/UEFI.
 - Media tools are copied to `%USERPROFILE%\Tools\media-tools` and wrappers are added to `%USERPROFILE%\bin`.
 - Support tools are copied to `%USERPROFILE%\Tools\support-tools`; `pc-audit` writes reports to `%USERPROFILE%\Desktop\pc-audit`.
+- Maestria Docker Lab helper is copied to `%USERPROFILE%\Tools\masters-docker-lab`; it clones `ruzer/maestria-anahuac-datos-docker` into `%USERPROFILE%\Maestria`.
 - Optional open-source apps can be installed from the interactive menu or by running `START-RECOMMENDED.cmd` / `START-ALL-EXTRAS.cmd`.
 - Hyperspace AI node is optional. On the Dell Latitude 7490 with Intel UHD Graphics 620, use CPU/light capabilities first:
 

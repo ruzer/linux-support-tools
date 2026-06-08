@@ -8,6 +8,7 @@ param(
     [switch]$InstallAutomationTools,
     [switch]$InstallGeoTools,
     [switch]$InstallSupportTools,
+    [switch]$InstallMastersDockerLab,
     [switch]$InstallAllExtras,
     [switch]$NoMenu,
     [switch]$SkipCondaEnv
@@ -77,6 +78,7 @@ function Show-OptionalMenu {
     Write-Host "3) Solo base: no instalar extras opcionales"
     Write-Host "4) Personalizado: elegir bloques"
     Write-Host "5) Maestria: IA + programacion + mineria de datos + soporte"
+    Write-Host "6) Maestria Docker Lab: incluye Docker + MySQL/Adminer/Metabase/Superset/Jupyter/Streamlit"
     Write-Host ""
     $choice = Read-Host "Elige 1, 2, 3 o 4"
 
@@ -112,6 +114,13 @@ function Show-OptionalMenu {
             $script:InstallAcademicOpenSource = $true
             $script:InstallLocalAIApps = $true
             $script:InstallSupportTools = $true
+        }
+        "6" {
+            $script:InstallAcademicOpenSource = $true
+            $script:InstallLocalAIApps = $true
+            $script:InstallSupportTools = $true
+            $script:InstallMastersDockerLab = $true
+            $script:InstallDocker = $true
         }
         default {
             Write-Host "Opcion no reconocida; se instalara solo base." -ForegroundColor Yellow
@@ -327,6 +336,37 @@ function Install-SupportScripts {
     }
 }
 
+function Install-MastersDockerLab {
+    if (-not ($InstallMastersDockerLab -or $InstallAllExtras)) { return }
+
+    Write-Step "Installing masters Docker lab helpers"
+    $source = Join-Path $KitRoot "tools\masters-docker-lab"
+    $target = Join-Path $env:USERPROFILE "Tools\masters-docker-lab"
+    $bin = Join-Path $env:USERPROFILE "bin"
+
+    New-Item -ItemType Directory -Force -Path $target | Out-Null
+    New-Item -ItemType Directory -Force -Path $bin | Out-Null
+
+    if (Test-Path $source) {
+        Copy-Item -Path (Join-Path $source "*") -Destination $target -Recurse -Force
+    } else {
+        Write-Host "Warning: masters-docker-lab source folder not found on USB: $source" -ForegroundColor Yellow
+        Add-Content -Path $LogFile -Value "Warning: masters-docker-lab source folder not found: $source"
+    }
+
+    $wrappers = @{
+        "maestria-lab.cmd" = "@echo off`r`npowershell.exe -NoProfile -ExecutionPolicy Bypass -File ""%USERPROFILE%\Tools\masters-docker-lab\maestria-lab.ps1"" %*`r`n"
+    }
+
+    foreach ($name in $wrappers.Keys) {
+        Set-Content -Path (Join-Path $bin $name) -Value $wrappers[$name] -Encoding ASCII
+    }
+
+    Add-UserPath -PathToAdd $bin
+
+    Write-Host "Masters Docker Lab helper installed. After reboot/Docker setup, run: maestria-lab setup" -ForegroundColor Green
+}
+
 function Find-RScript {
     $candidates = @(
         "$env:ProgramFiles\R\R-*\bin\Rscript.exe",
@@ -533,6 +573,7 @@ try {
     Create-CondaDataEnv
     Install-MediaTools
     Install-SupportScripts
+    Install-MastersDockerLab
     Install-OptionalPythonPackages
     Install-AutomationNpmTools
     Install-RPackages

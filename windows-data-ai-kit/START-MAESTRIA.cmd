@@ -9,7 +9,7 @@ if not "%errorlevel%"=="0" (
     exit /b
 )
 
-powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Install-WindowsDataLab.ps1" -NoMenu -PullSmallLlama -InstallAcademicOpenSource -InstallLocalAIApps -InstallSupportTools
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\Install-WindowsDataLab.ps1" -NoMenu -PullSmallLlama -InstallAcademicOpenSource -InstallLocalAIApps -InstallSupportTools -InstallMastersDockerLab -InstallDocker
 set "EXITCODE=%errorlevel%"
 echo.
 echo Installer finished with exit code %EXITCODE%.

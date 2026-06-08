@@ -47,3 +47,8 @@
 - Power BI Desktop: https://powerbi.microsoft.com/desktop/
 - DbGate: https://dbgate.org/
 - Bruno: https://www.usebruno.com/
+- Maestria Anahuac datos Docker repo: https://github.com/ruzer/maestria-anahuac-datos-docker
+- Metabase: https://www.metabase.com/
+- Apache Superset: https://superset.apache.org/
+- Streamlit: https://streamlit.io/
+- Jupyter Docker Stacks: https://jupyter-docker-stacks.readthedocs.io/

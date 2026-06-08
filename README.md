@@ -1,6 +1,6 @@
 # Linux Support Tools
 
-Version: `0.2.0`
+Version: `0.3.0`
 
 Herramientas utiles para preparar y mantener laptops Linux basadas en Debian.
 
@@ -43,6 +43,8 @@ chmod +x START-HERE-mac.command
 ```
 
 La opcion recomendada para otra laptop nueva es `START-RECOMMENDED.cmd`.
+Para reproducir el entorno de Maestria Anahuac con Docker, usa
+`START-MAESTRIA.cmd` y despues `maestria-lab setup/start`.
 
 Opciones frecuentes:
 
