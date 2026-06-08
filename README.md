@@ -1,6 +1,6 @@
 # Linux Support Tools
 
-Version: `0.1.0`
+Version: `0.2.0`
 
 Herramientas utiles para preparar y mantener laptops Linux basadas en Debian.
 
@@ -29,6 +29,7 @@ Lanzadores rapidos:
 
 ```text
 windows-data-ai-kit/START-RECOMMENDED.cmd
+windows-data-ai-kit/START-MAESTRIA.cmd
 windows-data-ai-kit/START-BASE-ONLY.cmd
 windows-data-ai-kit/START-ALL-EXTRAS.cmd
 ```

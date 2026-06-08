@@ -7,6 +7,7 @@ param(
     [switch]$InstallLocalAIApps,
     [switch]$InstallAutomationTools,
     [switch]$InstallGeoTools,
+    [switch]$InstallSupportTools,
     [switch]$InstallAllExtras,
     [switch]$NoMenu,
     [switch]$SkipCondaEnv
@@ -75,6 +76,7 @@ function Show-OptionalMenu {
     Write-Host "2) Todo: recomendado + Docker/automatizacion/geodatos pesados"
     Write-Host "3) Solo base: no instalar extras opcionales"
     Write-Host "4) Personalizado: elegir bloques"
+    Write-Host "5) Maestria: IA + programacion + mineria de datos + soporte"
     Write-Host ""
     $choice = Read-Host "Elige 1, 2, 3 o 4"
 
@@ -82,6 +84,7 @@ function Show-OptionalMenu {
         "1" {
             $script:InstallAcademicOpenSource = $true
             $script:InstallLocalAIApps = $true
+            $script:InstallSupportTools = $true
         }
         "2" {
             $script:InstallAllExtras = $true
@@ -89,6 +92,7 @@ function Show-OptionalMenu {
             $script:InstallLocalAIApps = $true
             $script:InstallAutomationTools = $true
             $script:InstallGeoTools = $true
+            $script:InstallSupportTools = $true
             $script:InstallDocker = $true
         }
         "3" {
@@ -97,11 +101,17 @@ function Show-OptionalMenu {
         "4" {
             $script:InstallAcademicOpenSource = (Read-Host "Instalar academico/datos open source? Orange, KNIME, Weka, Calibre, Joplin, DVC, MLflow, Label Studio [s/N]") -match "^[sSyY]"
             $script:InstallLocalAIApps = (Read-Host "Instalar apps IA locales? AnythingLLM, Open WebUI, Jan, LM Studio [s/N]") -match "^[sSyY]"
+            $script:InstallSupportTools = (Read-Host "Instalar soporte tecnico? diagnostico, remoto, discos, USB, sync [s/N]") -match "^[sSyY]"
             $script:InstallGeoTools = (Read-Host "Instalar geodatos? QGIS LTR, SAGA GIS [s/N]") -match "^[sSyY]"
             $script:InstallAutomationTools = (Read-Host "Instalar automatizacion? Docker, n8n/Node-RED por npm [s/N]") -match "^[sSyY]"
             if ($script:InstallAutomationTools) { $script:InstallDocker = $true }
             $script:InstallHyperspace = (Read-Host "Instalar Hyperspace node [s/N]") -match "^[sSyY]"
             $script:InstallMalwarebytes = (Read-Host "Instalar Malwarebytes [s/N]") -match "^[sSyY]"
+        }
+        "5" {
+            $script:InstallAcademicOpenSource = $true
+            $script:InstallLocalAIApps = $true
+            $script:InstallSupportTools = $true
         }
         default {
             Write-Host "Opcion no reconocida; se instalara solo base." -ForegroundColor Yellow
@@ -281,6 +291,42 @@ function Install-MediaTools {
     }
 }
 
+function Install-SupportScripts {
+    if (-not ($InstallSupportTools -or $InstallAllExtras)) { return }
+
+    Write-Step "Installing local support scripts"
+    $source = Join-Path $KitRoot "tools\support-tools"
+    $target = Join-Path $env:USERPROFILE "Tools\support-tools"
+    $bin = Join-Path $env:USERPROFILE "bin"
+
+    New-Item -ItemType Directory -Force -Path $target | Out-Null
+    New-Item -ItemType Directory -Force -Path $bin | Out-Null
+
+    if (Test-Path $source) {
+        Copy-Item -Path (Join-Path $source "*") -Destination $target -Recurse -Force
+    } else {
+        Write-Host "Warning: support-tools source folder not found on USB: $source" -ForegroundColor Yellow
+        Add-Content -Path $LogFile -Value "Warning: support-tools source folder not found: $source"
+    }
+
+    $wrappers = @{
+        "pc-audit.cmd" = "@echo off`r`npowershell.exe -NoProfile -ExecutionPolicy Bypass -File ""%USERPROFILE%\Tools\support-tools\pc-audit.ps1"" %*`r`n"
+    }
+
+    foreach ($name in $wrappers.Keys) {
+        Set-Content -Path (Join-Path $bin $name) -Value $wrappers[$name] -Encoding ASCII
+    }
+
+    Add-UserPath -PathToAdd $bin
+
+    try {
+        Write-Step "Ensuring OpenSSH Client capability"
+        Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0 | Tee-Object -FilePath $LogFile -Append
+    } catch {
+        Write-Host "Warning: OpenSSH Client setup failed: $($_.Exception.Message)" -ForegroundColor Yellow
+    }
+}
+
 function Find-RScript {
     $candidates = @(
         "$env:ProgramFiles\R\R-*\bin\Rscript.exe",
@@ -401,6 +447,37 @@ try {
         $packages += @{ Id = "Docker.DockerDesktop"; Name = "Docker Desktop" }
     }
 
+    if ($InstallSupportTools -or $InstallAllExtras) {
+        $packages += @(
+            @{ Id = "Microsoft.Sysinternals"; Name = "Microsoft Sysinternals Suite" },
+            @{ Id = "Microsoft.PowerShell"; Name = "PowerShell 7" },
+            @{ Id = "voidtools.Everything"; Name = "Everything file search" },
+            @{ Id = "AntibodySoftware.WizTree"; Name = "WizTree disk usage" },
+            @{ Id = "CrystalDewWorld.CrystalDiskInfo"; Name = "CrystalDiskInfo" },
+            @{ Id = "REALiX.HWiNFO"; Name = "HWiNFO" },
+            @{ Id = "CPUID.CPU-Z"; Name = "CPU-Z" },
+            @{ Id = "TechPowerUp.GPU-Z"; Name = "GPU-Z" },
+            @{ Id = "RustDesk.RustDesk"; Name = "RustDesk remote support" },
+            @{ Id = "Tailscale.Tailscale"; Name = "Tailscale" },
+            @{ Id = "WireGuard.WireGuard"; Name = "WireGuard" },
+            @{ Id = "PuTTY.PuTTY"; Name = "PuTTY" },
+            @{ Id = "WinSCP.WinSCP"; Name = "WinSCP" },
+            @{ Id = "FileZilla.FileZilla"; Name = "FileZilla" },
+            @{ Id = "VideoLAN.VLC"; Name = "VLC" },
+            @{ Id = "OBSProject.OBSStudio"; Name = "OBS Studio" },
+            @{ Id = "HandBrake.HandBrake"; Name = "HandBrake" },
+            @{ Id = "Audacity.Audacity"; Name = "Audacity" },
+            @{ Id = "GIMP.GIMP"; Name = "GIMP" },
+            @{ Id = "BleachBit.BleachBit"; Name = "BleachBit" },
+            @{ Id = "Rufus.Rufus"; Name = "Rufus" },
+            @{ Id = "Ventoy.Ventoy"; Name = "Ventoy" },
+            @{ Id = "Balena.Etcher"; Name = "balenaEtcher" },
+            @{ Id = "Syncthing.Syncthing"; Name = "Syncthing" },
+            @{ Id = "LocalSend.LocalSend"; Name = "LocalSend" },
+            @{ Id = "KDE.KDEConnect"; Name = "KDE Connect" }
+        )
+    }
+
     if ($InstallAcademicOpenSource -or $InstallAllExtras) {
         $packages += @(
             @{ Id = "Knime.AnalyticsPlatform.LTS"; Name = "KNIME Analytics Platform LTS" },
@@ -408,7 +485,18 @@ try {
             @{ Id = "calibre.calibre"; Name = "Calibre" },
             @{ Id = "Joplin.Joplin"; Name = "Joplin" },
             @{ Id = "PanWriter.PanWriter"; Name = "PanWriter" },
-            @{ Id = "Inkscape.Inkscape"; Name = "Inkscape" }
+            @{ Id = "Inkscape.Inkscape"; Name = "Inkscape" },
+            @{ Id = "Gephi.Gephi"; Name = "Gephi graph analysis" },
+            @{ Id = "Microsoft.PowerBI"; Name = "Power BI Desktop" },
+            @{ Id = "PostgreSQL.pgAdmin"; Name = "pgAdmin" },
+            @{ Id = "MongoDB.Compass.Full"; Name = "MongoDB Compass" },
+            @{ Id = "JanProchazka.dbgate"; Name = "DbGate" },
+            @{ Id = "WinMerge.WinMerge"; Name = "WinMerge" },
+            @{ Id = "Bruno.Bruno"; Name = "Bruno API Client" },
+            @{ Id = "Postman.Postman"; Name = "Postman" },
+            @{ Id = "DevToys-app.DevToys"; Name = "DevToys" },
+            @{ Id = "JASP.JASP"; Name = "JASP statistics" },
+            @{ Id = "jamovi.jamovi"; Name = "jamovi statistics" }
         )
     }
 
@@ -444,6 +532,7 @@ try {
 
     Create-CondaDataEnv
     Install-MediaTools
+    Install-SupportScripts
     Install-OptionalPythonPackages
     Install-AutomationNpmTools
     Install-RPackages

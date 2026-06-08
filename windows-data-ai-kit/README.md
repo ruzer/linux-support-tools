@@ -11,7 +11,8 @@ Para usarlo en la laptop con Windows 10:
 Lanzadores:
 
 - `START-HERE.cmd`: abre menu interactivo.
-- `START-RECOMMENDED.cmd`: recomendado para otra laptop; instala base + academico/datos + apps IA locales.
+- `START-RECOMMENDED.cmd`: recomendado para otra laptop; instala base + academico/datos + apps IA locales + soporte.
+- `START-MAESTRIA.cmd`: perfil para IA, programacion, mineria de datos, estadistica, documentos y soporte.
 - `START-BASE-ONLY.cmd`: solo base, lo mas rapido y conservador.
 - `START-ALL-EXTRAS.cmd`: instala todo, incluyendo Docker/geodatos/automatizacion; puede tardar bastante.
 
@@ -51,11 +52,13 @@ Instala y configura:
 - Microsoft Defender baseline
 - Reporte de hardware para revisar pantalla/GPU/drivers
 - Media tools locales: `vt`, `transcribir-video`, `dl`, `to-markdown`
+- Support tools locales: `pc-audit`
 
 Extras opcionales por menu:
 
-- Academico/datos open source: KNIME, Weka, Calibre, Joplin, PanWriter, Inkscape, DVC, MLflow, Label Studio, Orange3.
+- Academico/datos open source: KNIME, Weka, Calibre, Joplin, PanWriter, Inkscape, DVC, MLflow, Label Studio, Orange3, Gephi, Power BI, pgAdmin, MongoDB Compass, DbGate, WinMerge, Bruno, Postman, DevToys, JASP, jamovi.
 - Apps IA locales: AnythingLLM, Open WebUI, Jan, LM Studio.
+- Soporte tecnico: Sysinternals, PowerShell 7, Everything, WizTree, CrystalDiskInfo, HWiNFO, CPU-Z, GPU-Z, RustDesk, Tailscale, WireGuard, PuTTY, WinSCP, FileZilla, VLC, OBS, HandBrake, Audacity, GIMP, BleachBit, Rufus, Ventoy, Etcher, Syncthing, LocalSend, KDE Connect.
 - Geodatos: QGIS LTR, SAGA GIS.
 - Automatizacion: Docker Desktop, n8n, Node-RED.
 
@@ -72,6 +75,7 @@ vt transcribe "URL_DEL_VIDEO" es small
 transcribir-video "URL_DEL_VIDEO" es small
 dl "https://example.com/archivo.zip"
 to-markdown ".\documento.pdf" ".\documento.md"
+pc-audit
 ```
 
 Opcionales:

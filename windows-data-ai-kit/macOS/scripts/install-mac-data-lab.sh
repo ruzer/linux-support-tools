@@ -5,6 +5,7 @@ INSTALL_ACADEMIC=0
 INSTALL_LOCAL_AI=0
 INSTALL_AUTOMATION=0
 INSTALL_GEO=0
+INSTALL_SUPPORT=0
 INSTALL_ALL=0
 
 while [[ $# -gt 0 ]]; do
@@ -13,7 +14,9 @@ while [[ $# -gt 0 ]]; do
     --local-ai) INSTALL_LOCAL_AI=1 ;;
     --automation) INSTALL_AUTOMATION=1 ;;
     --geo) INSTALL_GEO=1 ;;
-    --all) INSTALL_ALL=1; INSTALL_ACADEMIC=1; INSTALL_LOCAL_AI=1; INSTALL_AUTOMATION=1; INSTALL_GEO=1 ;;
+    --support) INSTALL_SUPPORT=1 ;;
+    --masters|--maestria) INSTALL_ACADEMIC=1; INSTALL_LOCAL_AI=1; INSTALL_SUPPORT=1 ;;
+    --all) INSTALL_ALL=1; INSTALL_ACADEMIC=1; INSTALL_LOCAL_AI=1; INSTALL_AUTOMATION=1; INSTALL_GEO=1; INSTALL_SUPPORT=1 ;;
     --no-menu) ;;
     *) echo "Opcion desconocida: $1"; exit 2 ;;
   esac
@@ -36,18 +39,21 @@ ask_menu() {
   echo "2) Todo: recomendado + automatizacion/geodatos"
   echo "3) Solo base"
   echo "4) Personalizado"
+  echo "5) Maestria: IA + programacion + mineria de datos + soporte"
   echo
   read "choice?Elige 1, 2, 3 o 4: "
   case "$choice" in
-    1) INSTALL_ACADEMIC=1; INSTALL_LOCAL_AI=1 ;;
-    2) INSTALL_ALL=1; INSTALL_ACADEMIC=1; INSTALL_LOCAL_AI=1; INSTALL_AUTOMATION=1; INSTALL_GEO=1 ;;
+    1) INSTALL_ACADEMIC=1; INSTALL_LOCAL_AI=1; INSTALL_SUPPORT=1 ;;
+    2) INSTALL_ALL=1; INSTALL_ACADEMIC=1; INSTALL_LOCAL_AI=1; INSTALL_AUTOMATION=1; INSTALL_GEO=1; INSTALL_SUPPORT=1 ;;
     3) ;;
     4)
       read "ans?Academico/datos open source? [s/N]: "; [[ "$ans" =~ ^[sSyY] ]] && INSTALL_ACADEMIC=1
       read "ans?Apps IA locales? [s/N]: "; [[ "$ans" =~ ^[sSyY] ]] && INSTALL_LOCAL_AI=1
+      read "ans?Soporte tecnico/utilidades? [s/N]: "; [[ "$ans" =~ ^[sSyY] ]] && INSTALL_SUPPORT=1
       read "ans?Geodatos? [s/N]: "; [[ "$ans" =~ ^[sSyY] ]] && INSTALL_GEO=1
       read "ans?Automatizacion/Docker? [s/N]: "; [[ "$ans" =~ ^[sSyY] ]] && INSTALL_AUTOMATION=1
       ;;
+    5) INSTALL_ACADEMIC=1; INSTALL_LOCAL_AI=1; INSTALL_SUPPORT=1 ;;
     *) echo "Opcion no reconocida; se instalara solo base." ;;
   esac
 }
@@ -195,7 +201,8 @@ brew_cask_install miniforge
 brew_cask_install google-chrome visual-studio-code pycharm-ce rstudio libreoffice zotero obsidian rectangle iterm2 stats
 
 if [[ "$INSTALL_ACADEMIC" == "1" ]]; then
-  brew_cask_install knime orange calibre joplin panwriter inkscape
+  brew_cask_install knime orange calibre joplin panwriter inkscape gephi jasp jamovi
+  brew_install dvc mlflow
 fi
 
 if [[ "$INSTALL_LOCAL_AI" == "1" ]]; then
@@ -210,6 +217,11 @@ fi
 if [[ "$INSTALL_AUTOMATION" == "1" ]]; then
   brew_cask_install docker
   npm install -g n8n node-red
+fi
+
+if [[ "$INSTALL_SUPPORT" == "1" ]]; then
+  brew_install smartmontools nmap
+  brew_cask_install stats appcleaner rustdesk tailscale wireguard viscosity vlc obs handbrake audacity gimp balenaetcher syncthing localsend keka
 fi
 
 setup_python_env

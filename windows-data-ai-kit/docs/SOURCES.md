@@ -33,3 +33,17 @@
 - LM Studio: https://lmstudio.ai/
 - Homebrew: https://brew.sh/
 - Miniforge Homebrew cask: https://formulae.brew.sh/cask/miniforge
+- Microsoft Sysinternals: https://learn.microsoft.com/sysinternals/
+- Everything Search: https://www.voidtools.com/
+- CrystalDiskInfo: https://crystalmark.info/en/software/crystaldiskinfo/
+- HWiNFO: https://www.hwinfo.com/
+- RustDesk: https://rustdesk.com/
+- Tailscale: https://tailscale.com/
+- Syncthing: https://syncthing.net/
+- LocalSend: https://localsend.org/
+- JASP: https://jasp-stats.org/
+- jamovi: https://www.jamovi.org/
+- Gephi: https://gephi.org/
+- Power BI Desktop: https://powerbi.microsoft.com/desktop/
+- DbGate: https://dbgate.org/
+- Bruno: https://www.usebruno.com/

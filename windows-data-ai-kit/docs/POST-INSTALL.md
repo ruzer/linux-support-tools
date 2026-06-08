@@ -4,6 +4,8 @@ Run `START-HERE.cmd` from the USB as Administrator.
 
 For a fast repeat install on another laptop, run `START-RECOMMENDED.cmd`.
 
+For a master's/data-mining laptop, run `START-MAESTRIA.cmd`.
+
 After the installer finishes:
 
 1. Restart Windows.
@@ -26,6 +28,7 @@ ffmpeg -version
 yt-dlp --version
 aria2c --version
 vt where
+pc-audit
 ```
 
 For local Llama:
@@ -56,6 +59,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\Install-WindowsDataLab.ps1 -I
 - RStudio should automatically detect R. If it does not, open RStudio settings and point it to `C:\Program Files\R\R-*\bin\R.exe`.
 - Docker Desktop is optional. It requires Windows 10 22H2, WSL 2, 8 GB+ RAM, and virtualization enabled in BIOS/UEFI.
 - Media tools are copied to `%USERPROFILE%\Tools\media-tools` and wrappers are added to `%USERPROFILE%\bin`.
+- Support tools are copied to `%USERPROFILE%\Tools\support-tools`; `pc-audit` writes reports to `%USERPROFILE%\Desktop\pc-audit`.
 - Optional open-source apps can be installed from the interactive menu or by running `START-RECOMMENDED.cmd` / `START-ALL-EXTRAS.cmd`.
 - Hyperspace AI node is optional. On the Dell Latitude 7490 with Intel UHD Graphics 620, use CPU/light capabilities first:
 
