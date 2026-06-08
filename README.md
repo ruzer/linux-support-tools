@@ -1,6 +1,6 @@
 # Linux Support Tools
 
-Version: `0.3.0`
+Version: `0.4.0`
 
 Herramientas utiles para preparar y mantener laptops Linux basadas en Debian.
 
@@ -30,6 +30,7 @@ Lanzadores rapidos:
 ```text
 windows-data-ai-kit/START-RECOMMENDED.cmd
 windows-data-ai-kit/START-MAESTRIA.cmd
+windows-data-ai-kit/START-ODYSSEUS.cmd
 windows-data-ai-kit/START-BASE-ONLY.cmd
 windows-data-ai-kit/START-ALL-EXTRAS.cmd
 ```
@@ -45,6 +46,8 @@ chmod +x START-HERE-mac.command
 La opcion recomendada para otra laptop nueva es `START-RECOMMENDED.cmd`.
 Para reproducir el entorno de Maestria Anahuac con Docker, usa
 `START-MAESTRIA.cmd` y despues `maestria-lab setup/start`.
+Para Odysseus self-hosted AI workspace, usa `START-ODYSSEUS.cmd` y despues
+`odysseus-lab setup/start`.
 
 Opciones frecuentes:
 

@@ -13,6 +13,7 @@ Lanzadores:
 - `START-HERE.cmd`: abre menu interactivo.
 - `START-RECOMMENDED.cmd`: recomendado para otra laptop; instala base + academico/datos + apps IA locales + soporte.
 - `START-MAESTRIA.cmd`: perfil para IA, programacion, mineria de datos, estadistica, documentos, soporte y Maestria Docker Lab.
+- `START-ODYSSEUS.cmd`: instala helper para Odysseus self-hosted AI workspace, Docker y localhost-only.
 - `START-BASE-ONLY.cmd`: solo base, lo mas rapido y conservador.
 - `START-ALL-EXTRAS.cmd`: instala todo, incluyendo Docker/geodatos/automatizacion; puede tardar bastante.
 
@@ -54,6 +55,7 @@ Instala y configura:
 - Media tools locales: `vt`, `transcribir-video`, `dl`, `to-markdown`
 - Support tools locales: `pc-audit`
 - Maestria Docker Lab local: `maestria-lab`
+- Odysseus local: `odysseus-lab`
 
 Extras opcionales por menu:
 
@@ -63,6 +65,7 @@ Extras opcionales por menu:
 - Geodatos: QGIS LTR, SAGA GIS.
 - Automatizacion: Docker Desktop, n8n, Node-RED.
 - Maestria Docker Lab: clona `ruzer/maestria-anahuac-datos-docker` y prepara MySQL, Adminer, Metabase, Superset, Jupyter, Streamlit y backups.
+- Odysseus: clona `pewdiepie-archdaemon/odysseus`, prepara `.env` seguro y levanta Docker en `http://localhost:7000`.
 
 La laptop necesita internet para descargar versiones actuales.
 
@@ -80,7 +83,11 @@ to-markdown ".\documento.pdf" ".\documento.md"
 pc-audit
 maestria-lab setup
 maestria-lab start
+odysseus-lab setup
+odysseus-lab start
 ```
+
+Nota de seguridad: Odysseus tiene capacidades privilegiadas como shell, archivos, agentes, email y MCP. Mantenerlo en localhost o detras de VPN/Tailscale.
 
 Opcionales:
 

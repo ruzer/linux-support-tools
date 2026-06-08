@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0 - 2026-06-08
+
+- Add optional Odysseus self-hosted AI workspace profile.
+- Add `START-ODYSSEUS.cmd` and `odysseus-lab` helper.
+- Configure Odysseus localhost-only by default with auth enabled and localhost bypass disabled.
+- Use Odysseus `main` branch by default because upstream marks `dev` as potentially unstable.
+
 ## 0.3.0 - 2026-06-08
 
 - Wire `START-MAESTRIA.cmd` to the real GitHub repo `ruzer/maestria-anahuac-datos-docker`.

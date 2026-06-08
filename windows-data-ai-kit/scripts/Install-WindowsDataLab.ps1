@@ -9,6 +9,7 @@ param(
     [switch]$InstallGeoTools,
     [switch]$InstallSupportTools,
     [switch]$InstallMastersDockerLab,
+    [switch]$InstallOdysseus,
     [switch]$InstallAllExtras,
     [switch]$NoMenu,
     [switch]$SkipCondaEnv
@@ -79,6 +80,7 @@ function Show-OptionalMenu {
     Write-Host "4) Personalizado: elegir bloques"
     Write-Host "5) Maestria: IA + programacion + mineria de datos + soporte"
     Write-Host "6) Maestria Docker Lab: incluye Docker + MySQL/Adminer/Metabase/Superset/Jupyter/Streamlit"
+    Write-Host "7) Odysseus: self-hosted AI workspace Docker, localhost-only"
     Write-Host ""
     $choice = Read-Host "Elige 1, 2, 3 o 4"
 
@@ -120,6 +122,10 @@ function Show-OptionalMenu {
             $script:InstallLocalAIApps = $true
             $script:InstallSupportTools = $true
             $script:InstallMastersDockerLab = $true
+            $script:InstallDocker = $true
+        }
+        "7" {
+            $script:InstallOdysseus = $true
             $script:InstallDocker = $true
         }
         default {
@@ -367,6 +373,30 @@ function Install-MastersDockerLab {
     Write-Host "Masters Docker Lab helper installed. After reboot/Docker setup, run: maestria-lab setup" -ForegroundColor Green
 }
 
+function Install-OdysseusHelper {
+    if (-not ($InstallOdysseus -or $InstallAllExtras)) { return }
+
+    Write-Step "Installing Odysseus helper"
+    $source = Join-Path $KitRoot "tools\odysseus"
+    $target = Join-Path $env:USERPROFILE "Tools\odysseus"
+    $bin = Join-Path $env:USERPROFILE "bin"
+
+    New-Item -ItemType Directory -Force -Path $target | Out-Null
+    New-Item -ItemType Directory -Force -Path $bin | Out-Null
+
+    if (Test-Path $source) {
+        Copy-Item -Path (Join-Path $source "*") -Destination $target -Recurse -Force
+    } else {
+        Write-Host "Warning: odysseus source folder not found on USB: $source" -ForegroundColor Yellow
+        Add-Content -Path $LogFile -Value "Warning: odysseus source folder not found: $source"
+    }
+
+    Set-Content -Path (Join-Path $bin "odysseus-lab.cmd") -Value "@echo off`r`npowershell.exe -NoProfile -ExecutionPolicy Bypass -File ""%USERPROFILE%\Tools\odysseus\odysseus-lab.ps1"" %*`r`n" -Encoding ASCII
+
+    Add-UserPath -PathToAdd $bin
+    Write-Host "Odysseus helper installed. After Docker setup/reboot, run: odysseus-lab setup" -ForegroundColor Green
+}
+
 function Find-RScript {
     $candidates = @(
         "$env:ProgramFiles\R\R-*\bin\Rscript.exe",
@@ -574,6 +604,7 @@ try {
     Install-MediaTools
     Install-SupportScripts
     Install-MastersDockerLab
+    Install-OdysseusHelper
     Install-OptionalPythonPackages
     Install-AutomationNpmTools
     Install-RPackages

@@ -52,3 +52,6 @@
 - Apache Superset: https://superset.apache.org/
 - Streamlit: https://streamlit.io/
 - Jupyter Docker Stacks: https://jupyter-docker-stacks.readthedocs.io/
+- Odysseus repo: https://github.com/pewdiepie-archdaemon/odysseus
+- Odysseus security policy: https://github.com/pewdiepie-archdaemon/odysseus/blob/main/SECURITY.md
+- Odysseus threat model: https://github.com/pewdiepie-archdaemon/odysseus/blob/main/THREAT_MODEL.md

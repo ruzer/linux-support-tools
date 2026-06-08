@@ -30,6 +30,7 @@ aria2c --version
 vt where
 pc-audit
 maestria-lab where
+odysseus-lab where
 ```
 
 For local Llama:
@@ -56,6 +57,16 @@ maestria-lab urls
 
 If Docker Desktop was installed during this run, restart Windows before `maestria-lab start`.
 
+For Odysseus self-hosted AI workspace:
+
+```powershell
+odysseus-lab setup
+odysseus-lab start
+odysseus-lab password
+```
+
+Open `http://localhost:7000`. Keep it localhost-only unless you intentionally put it behind VPN/Tailscale.
+
 Notes:
 
 - Microsoft Defender is enough for most clean Windows 10 installs. The script enables PUA protection and updates signatures.
@@ -72,6 +83,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\Install-WindowsDataLab.ps1 -I
 - Media tools are copied to `%USERPROFILE%\Tools\media-tools` and wrappers are added to `%USERPROFILE%\bin`.
 - Support tools are copied to `%USERPROFILE%\Tools\support-tools`; `pc-audit` writes reports to `%USERPROFILE%\Desktop\pc-audit`.
 - Maestria Docker Lab helper is copied to `%USERPROFILE%\Tools\masters-docker-lab`; it clones `ruzer/maestria-anahuac-datos-docker` into `%USERPROFILE%\Maestria`.
+- Odysseus helper is copied to `%USERPROFILE%\Tools\odysseus`; it clones `pewdiepie-archdaemon/odysseus` into `%USERPROFILE%\AI\odysseus`.
 - Optional open-source apps can be installed from the interactive menu or by running `START-RECOMMENDED.cmd` / `START-ALL-EXTRAS.cmd`.
 - Hyperspace AI node is optional. On the Dell Latitude 7490 with Intel UHD Graphics 620, use CPU/light capabilities first:
 
